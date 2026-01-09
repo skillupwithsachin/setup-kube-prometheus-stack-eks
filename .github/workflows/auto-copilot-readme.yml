@@ -34,7 +34,9 @@ jobs:
         run: |
           gh extension install github/gh-copilot || true
 
-      - name: Generate README using Copilot
+      - name: Generate README using GitHub Models
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           PROMPT=$(cat <<'EOF'
           Generate a professional README.md for this repository.
@@ -53,9 +55,11 @@ jobs:
           EOF
           )
 
-          gh copilot suggest \
-            --prompt "$PROMPT" \
-            --target markdown > README.md
+          gh api \
+            -H "Accept: application/vnd.github+json" \
+            /ai/models/gpt-4.1-mini/infer \
+            -f input="$PROMPT" \
+            --jq '.output[0].content[0].text' > README.md
 
       - name: Commit and push README
         run: |
