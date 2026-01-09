@@ -6,8 +6,3 @@ replicaCount: 1
 
 service:
   port: 8080
-
-serviceMonitor:
-  enabled: true
-  interval: 15s
-  path: /metrics
