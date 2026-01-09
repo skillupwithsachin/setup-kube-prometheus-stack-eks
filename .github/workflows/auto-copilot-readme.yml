@@ -1,0 +1,67 @@
+name: Auto Generate README using Copilot
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - README.md
+
+permissions:
+  contents: write
+
+jobs:
+  generate-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gh
+
+      - name: Authenticate GitHub CLI
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh auth setup-git
+          gh auth status
+
+      - name: Install Copilot CLI extension
+        run: |
+          gh extension install github/gh-copilot || true
+
+      - name: Generate README using Copilot
+        run: |
+          PROMPT=$(cat << 'EOF'
+Generate a professional README.md for this repository.
+
+Include:
+- Project overview
+- Architecture
+- Prerequisites
+- Deployment steps
+- Folder structure
+- Monitoring (Prometheus + Grafana)
+- How to access Grafana
+- Cleanup steps
+
+Use Markdown.
+EOF
+          )
+
+          gh copilot suggest \
+            --prompt "$PROMPT" \
+            --target markdown > README.md
+
+      - name: Commit and push README
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add README.md
+          git commit -m "chore: auto-generate README using Copilot" || exit 0
+          git push
