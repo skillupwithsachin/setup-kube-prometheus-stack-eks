@@ -1,0 +1,40 @@
+# ---------------------------
+# Disable Alertmanager
+# ---------------------------
+alertmanager:
+  enabled: false
+
+# ---------------------------
+# Disable Pushgateway
+# ---------------------------
+pushgateway:
+  enabled: false
+
+# ---------------------------
+# Disable Node Exporter
+# ---------------------------
+nodeExporter:
+  enabled: false
+
+# ---------------------------
+# Prometheus Server (lightweight)
+# ---------------------------
+server:
+  retention: "2d"
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 300m
+      memory: 512Mi
+
+  service:
+    type: ClusterIP
+
+# ---------------------------
+# Disable extra Kubernetes components
+# ---------------------------
+kubeStateMetrics:
+  en
