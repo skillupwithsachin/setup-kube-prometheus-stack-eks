@@ -37,20 +37,20 @@ jobs:
       - name: Generate README using Copilot
         run: |
           PROMPT=$(cat <<'EOF'
-Generate a professional README.md for this repository.
+          Generate a professional README.md for this repository.
 
-Include:
-- Project overview
-- Architecture
-- Prerequisites
-- Deployment steps
-- Folder structure
-- Monitoring (Prometheus + Grafana)
-- How to access Grafana
-- Cleanup steps
+          Include:
+          - Project overview
+          - Architecture
+          - Prerequisites
+          - Deployment steps
+          - Folder structure
+          - Monitoring (Prometheus + Grafana)
+          - How to access Grafana
+          - Cleanup steps
 
-Use Markdown.
-EOF
+          Use Markdown.
+          EOF
           )
 
           gh copilot suggest \
